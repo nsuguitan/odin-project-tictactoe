@@ -12,25 +12,6 @@ const Player = (name,symbol) => { //factory function for tic tac toe players
     return{getName, getSymbol, takeTurn, winner}
 }
 
-function play(){
-    console.log("Wanna play a game?")
-    board = Array(9).fill("0")
-    const p1 = Player("player 1", "X");
-    const p2 = Player("player 2", "O");
-    for (let i = 0; i < board.length; i++) {
-        if(i%2 == 0){
-            board[p1.takeTurn()] = 1;
-        }
-        else{
-            board[p2.takeTurn()] = -1;
-        }
-        
-      }
-    //TRIGGER IT'S A TIE LOGIC or ADD TIE LOGIC TO CHECK WINNER
-    
-    
-}
-
 function checkWinner(lastMove, board){
 //check row
 rowStart = Math.floor(lastMove/3) * 3
@@ -43,7 +24,48 @@ if(Math.abs(board[lastMove] + board[(lastMove+3)%9] + board[(lastMove + 6)%9]) =
 if(lastMove%4 == 0 && Math.abs(board[0] + board[4] + board[8]) == 3){return True}
 //check right diagonal, but checks when position 0 and 8 are played as well
 if(lastMove%2 == 0 && Math.abs(board[2] + board[4] + board[6]) == 3){return True}
-} 
+} ;
 
 
-play();
+const gameBoard = (() => {
+    board = Array(9).fill("0")
+    turnCount = 0;
+    const update = (position) => {
+        if(turnCount % 2 == 0) {board[position] = 1}
+        else{board[position] = -1};
+        turnCount ++;       
+    }    
+}
+)();
+
+const play = (() => {
+    const p1 = Player("player 1", "X");
+    const p2 = Player("player 2", "O");
+    let turn = p1;
+    
+    const changeTurn = (buttonId) =>{
+        if(turn == p1){turn == p2}
+        else {turn == p1};
+    }
+    const getTurn = ()=> {
+        console.log("This is p1:",p1);
+        return turn;
+    };
+    return{changeTurn, getTurn}
+}
+)(); 
+const displayController = (() => {
+    //const htmlBoard = Array.from(document.querySelectorAll('button.child'));
+    const updateSquare = (buttonId) =>{
+        
+        console.log("Heyoooo");
+        console.log(buttonId);
+        var elem = document.getElementById(buttonId);
+        console.log("This is getTurn call",play.getTurn());
+        console.log(play.getTurn().getSymbol());
+        if (elem.textContent=="") elem.textContent = play.getTurn().getSymbol();
+        else elem.textContent = "Hello";
+    };
+    return{updateSquare}
+}
+)(); 

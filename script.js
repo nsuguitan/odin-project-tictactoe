@@ -42,7 +42,22 @@ const play = (() => {
     const p1 = Player("player 1", "X");
     const p2 = Player("player 2", "O");
     let turn = p1;
-    
+    const takeTurn = (buttonId) =>{
+        if (validMoveCheck(buttonId)){
+            displayController.updateSquare(buttonId);
+            changeTurn();
+        }
+    }
+    const validMoveCheck = (buttonId) => {
+        var elem = document.getElementById(buttonId);
+        if (elem.textContent=="") {
+            return true;
+            }
+        else{
+            alert("You can't go there, you silly nugget! Try again :P");
+            return false;        
+        };
+    }
     const changeTurn = (buttonId) =>{
         console.log("changing turns")
         if(turn == p1){
@@ -56,23 +71,14 @@ const play = (() => {
         console.log("This is p1:",p1);
         return turn;
     };
-    return{changeTurn, getTurn}
+    return{changeTurn, getTurn, takeTurn, validMoveCheck}
 }
 )(); 
 const displayController = (() => {
     //const htmlBoard = Array.from(document.querySelectorAll('button.child'));
     const updateSquare = (buttonId) =>{
-        
-        console.log("Heyoooo");
-        console.log(buttonId);
         var elem = document.getElementById(buttonId);
-        console.log("This is getTurn call",play.getTurn());
-        console.log(play.getTurn().getSymbol());
-        if (elem.textContent=="") {
-            elem.textContent = play.getTurn().getSymbol();
-            play.changeTurn();
-            }
-        else{alert("You can't go there, you silly nugget! Try again :P")};
+        elem.textContent = play.getTurn().getSymbol();
     };
     return{updateSquare}
 }

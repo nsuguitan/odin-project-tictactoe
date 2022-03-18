@@ -44,8 +44,13 @@ const play = (() => {
     let turn = p1;
     
     const changeTurn = (buttonId) =>{
-        if(turn == p1){turn == p2}
-        else {turn == p1};
+        console.log("changing turns")
+        if(turn == p1){
+            turn = p2;
+            console.log("testing checkpoint:", turn.getName());
+        }
+        else {turn = p1};
+        console.log("changing to:", turn.getName())
     }
     const getTurn = ()=> {
         console.log("This is p1:",p1);
@@ -63,8 +68,11 @@ const displayController = (() => {
         var elem = document.getElementById(buttonId);
         console.log("This is getTurn call",play.getTurn());
         console.log(play.getTurn().getSymbol());
-        if (elem.textContent=="") elem.textContent = play.getTurn().getSymbol();
-        else elem.textContent = "Hello";
+        if (elem.textContent=="") {
+            elem.textContent = play.getTurn().getSymbol();
+            play.changeTurn();
+            }
+        else{alert("You can't go there, you silly nugget! Try again :P")};
     };
     return{updateSquare}
 }

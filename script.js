@@ -7,11 +7,8 @@ const Player = (name,symbol) => { //factory function for tic tac toe players
     return{getName, getSymbol, winner}
 }
 
-
-
-
 const gameBoard = (() => {
-    board = Array(9).fill("0")
+    let board = Array(9).fill("0")
     const update = (buttonId) => {
         position = buttonId.charAt(1)
         if(play.getTurn().getSymbol() == "X") {board[position] = 1}
@@ -20,7 +17,10 @@ const gameBoard = (() => {
     const getBoard =() =>{
         return board;
     };  
-    return{update, getBoard}
+    const reset =() =>{
+        board = Array(9).fill("0");
+    };  
+    return{update, getBoard, reset}
 }
 )();
 
@@ -28,6 +28,13 @@ const play = (() => {
     const p1 = Player("player 1", "X");
     const p2 = Player("player 2", "O");
     let turn = p1;
+    let btn_reset = document.getElementById("resetButton")
+
+    btn_reset.addEventListener("click", () => {
+        displayController.reset();
+        gameBoard.reset();
+    });
+    
     const takeTurn = (buttonId) =>{
         if (validMoveCheck(buttonId)){
             displayController.updateSquare(buttonId);
@@ -78,17 +85,20 @@ const play = (() => {
         //check right diagonal, but checks when position 0 and 8 are played as well
         if(lastMove%2 == 0 && Math.abs(board[2] + board[4] + board[6]) == 3){return true}
         else {return false} 
-        }
-        ;
+        };
+        
     return{changeTurn, getTurn, takeTurn, validMoveCheck, checkWinner}
 }
 )(); 
 const displayController = (() => {
-    //const htmlBoard = Array.from(document.querySelectorAll('button.child'));
+    const htmlBoard = Array.from(document.querySelectorAll('button.child'));
     const updateSquare = (buttonId) =>{
         var elem = document.getElementById(buttonId);
         elem.textContent = play.getTurn().getSymbol();
     };
-    return{updateSquare}
+    const reset = () =>{
+        htmlBoard.forEach((x, i) => x.textContent = "")
+    };
+    return{updateSquare, reset}
 }
 )(); 

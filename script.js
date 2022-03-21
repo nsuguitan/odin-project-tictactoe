@@ -8,7 +8,7 @@ const Player = (name,symbol) => { //factory function for tic tac toe players
 }
 
 const gameBoard = (() => {
-    let board = Array(9).fill("0")
+    let board = Array(9).fill(0)
     const update = (buttonId) => {
         position = buttonId.charAt(1)
         if(play.getTurn().getSymbol() == "X") {board[position] = 1}
@@ -18,9 +18,12 @@ const gameBoard = (() => {
         return board;
     };  
     const reset =() =>{
-        board = Array(9).fill("0");
-    };  
-    return{update, getBoard, reset}
+        board = Array(9).fill(0);
+    };
+    function availableMoves() {
+        return board.filter(val => val == 0).length
+      }  
+    return{update, getBoard, reset, availableMoves}
 }
 )();
 
@@ -44,9 +47,12 @@ const play = (() => {
                 if(checkWinner(buttonId)){
                     displayController.stop();
                     turn.winner()
-                };
+                }
+                else if(gameBoard.availableMoves() == 0){
+                    alert("It's a tie!")
+                }
                 }, 200);
-            changeTurn();
+                setTimeout(() => {changeTurn()}, 400);
         }
     };
     const validMoveCheck = (buttonId) => {

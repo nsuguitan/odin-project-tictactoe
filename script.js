@@ -2,7 +2,7 @@ const Player = (name,symbol) => { //factory function for tic tac toe players
     const getName = () => name;
     const getSymbol = () => symbol;
     const winner = () => {
-
+        alert(name + " is the winner! 'Reset' to play again.");
     };
     return{getName, getSymbol, winner}
 }
@@ -33,15 +33,17 @@ const play = (() => {
     btn_reset.addEventListener("click", () => {
         displayController.reset();
         gameBoard.reset();
+        turn = p1;
     });
-    
+
     const takeTurn = (buttonId) =>{
         if (validMoveCheck(buttonId)){
             displayController.updateSquare(buttonId);
             gameBoard.update(buttonId);
             setTimeout(() => {
                 if(checkWinner(buttonId)){
-                    alert("Winner winner chicken dinner!")
+                    displayController.stop();
+                    turn.winner()
                 };
                 }, 200);
             changeTurn();
@@ -95,10 +97,15 @@ const displayController = (() => {
     const updateSquare = (buttonId) =>{
         var elem = document.getElementById(buttonId);
         elem.textContent = play.getTurn().getSymbol();
+        elem.disabled = true;
     };
     const reset = () =>{
         htmlBoard.forEach((x, i) => x.textContent = "")
+        htmlBoard.forEach((x, i) => x.disabled = false)
     };
-    return{updateSquare, reset}
+    const stop = () =>{
+        htmlBoard.forEach((x, i) => x.disabled = true)
+    };
+    return{updateSquare, reset, stop}
 }
 )(); 
